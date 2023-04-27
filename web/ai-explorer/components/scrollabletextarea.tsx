@@ -38,7 +38,9 @@ function ScrollableTextArea(): JSX.Element {
         }
     }, [data]);
 
-    const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleTextChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
         setText(event.target.value);
     };
 
@@ -75,51 +77,52 @@ function ScrollableTextArea(): JSX.Element {
     return (
         <div style={{ display: "flex", height: "100vh" }}>
             <div style={{ flexGrow: 1 }}>
-                {data && !isLoading && !error && (
+                {isLoading ? (
+                    "Loading..."
+                ) : error ? (
+                    "Error fetching data"
+                ) : (
                     <>
-                        <div
-                            style={{
-                                height: "66%",
-                                overflowY: "scroll",
-                                fontSize: "2em",
-                            }}
-                            ref={textAreaRef}
-                        >
-                            {data?.description || ""}
-                        </div>
-                        <input
-                            type="text"
-                            placeholder="Type something here..."
-                            value={text}
-                            onChange={handleTextChange}
-                            onKeyDown={handleKeyDown}
-                            style={{
-                                height: "3rem",
-                                padding: "0.5rem",
-                                borderTop: "1px solid #ccc",
-                            }}
+                        <img
+                            src={data?.imageUrl || ""}
+                            alt=""
+                            style={{ width: "100%", height: "66%" }}
                         />
-                        <div>
-                            <button onClick={handleResetClick}>Reset</button>
-                        </div>
-                        <div style={{ whiteSpace: "pre-line" }}>
-                            {data.nextLocations.map((nextLocation: string) => (
-                                <button
-                                    key={nextLocation}
-                                    onClick={() => handleButtonClick(nextLocation)}
-                                    style={{ display: "block", marginBottom: "5px" }}
-                                >
-                                    {nextLocation}
-                                </button>
-                            ))}
+                        <div style={{ display: "flex" }}>
+                            <div style={{ flexGrow: 1, fontSize: "2em" }}>
+                                {data?.description || ""}
+                            </div>
+                            <div style={{ marginLeft: "1rem" }}>
+                                {data?.nextLocations.map((nextLocation: string) => (
+                                    <button
+                                        key={nextLocation}
+                                        onClick={() => handleButtonClick(nextLocation)}
+                                        style={{ display: "block", marginBottom: "5px" }}
+                                    >
+                                        {nextLocation}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     </>
                 )}
             </div>
-            <div style={{ flexGrow: 1 }}>
-                {data && !isLoading && !error && (
-                    <img src={data.imageUrl} alt="" style={{ maxWidth: "100%" }} />
-                )}
+            <div>
+                <input
+                    type="text"
+                    placeholder="Type something here..."
+                    value={text}
+                    onChange={handleTextChange}
+                    onKeyDown={handleKeyDown}
+                    style={{
+                        height: "3rem",
+                        padding: "0.5rem",
+                        borderTop: "1px solid #ccc",
+                    }}
+                />
+                <div>
+                    <button onClick={handleResetClick}>Reset</button>
+                </div>
             </div>
         </div>
     );
