@@ -21,16 +21,17 @@ import org.springframework.stereotype.Component
 @Component
 class ExplorationService(
     @Value("\${apiKey}")
-    val apiKey: String
+    private val apiKey: String
 ) {
-    val openAI: OpenAI = OpenAI(apiKey)
+    private val openAI: OpenAI = OpenAI(apiKey)
 
     @OptIn(BetaOpenAI::class)
     private val messages = mutableListOf<ChatMessage>()
+    private var imageUrl = ""
+    private var locationOptions = listOf<String>()
 
     init {
         initializeMessages()
-
     }
 
     fun explore(exploreRequest: String): ExplorationDTO {
@@ -47,26 +48,44 @@ class ExplorationService(
 
     @OptIn(BetaOpenAI::class)
     private fun privateExploration(exploreRequest: String): ExplorationDTO {
-        val newMessage = ChatMessage(
-            role = ChatRole.User,
-            content = exploreRequest
-        )
-        messages.add(newMessage)
+        try {
+            val newMessage = ChatMessage(
+                role = ChatRole.User,
+                content = exploreRequest
+            )
 
-        val completionRequest = ChatCompletionRequest(
-            model = ModelId("gpt-3.5-turbo"),
-            messages = messages
+            val completionRequest = ChatCompletionRequest(
+                model = ModelId("gpt-3.5-turbo"),
+                messages = messages
 
-        )
+            )
 
-        val completion: ChatCompletion = chatCompletion(completionRequest)
+            val completion: ChatCompletion = chatCompletion(completionRequest)
 
-        val responsMessage = completion.choices.first().message
-        if (responsMessage != null) {
+            val responsMessage = completion.choices.first().message
+
+            if (responsMessage == null) {
+                throw Exception("No response from GPT")
+            }
+
+
+            val explorationDTO = processResponse(responsMessage?.content)
+
+            imageUrl = explorationDTO.imageUrl
+            locationOptions = explorationDTO.nextLocations
+
+            messages.add(newMessage)
             messages.add(responsMessage)
+
+            return explorationDTO
+        } catch (e: Exception) {
+            return ExplorationDTO(
+                "Something went wrong, try a different option",
+                imageUrl,
+                locationOptions
+            )
         }
 
-        return processResponse(responsMessage?.content)
     }
 
     private fun initializeMessages() {
