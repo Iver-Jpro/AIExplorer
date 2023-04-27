@@ -88,21 +88,12 @@ function ScrollableTextArea(): JSX.Element {
                             alt=""
                             style={{ width: "100%", height: "66%" }}
                         />
+
                         <div style={{ display: "flex" }}>
                             <div style={{ flexGrow: 1, fontSize: "2em" }}>
                                 {data?.description || ""}
                             </div>
-                            <div style={{ marginLeft: "1rem" }}>
-                                {data?.nextLocations.map((nextLocation: string) => (
-                                    <button
-                                        key={nextLocation}
-                                        onClick={() => handleButtonClick(nextLocation)}
-                                        style={{ display: "block", marginBottom: "5px" }}
-                                    >
-                                        {nextLocation}
-                                    </button>
-                                ))}
-                            </div>
+
                         </div>
                     </>
                 )}
@@ -110,7 +101,7 @@ function ScrollableTextArea(): JSX.Element {
             <div>
                 <input
                     type="text"
-                    placeholder="Type something here..."
+                    placeholder="Where do you want to go?"
                     value={text}
                     onChange={handleTextChange}
                     onKeyDown={handleKeyDown}
@@ -118,10 +109,22 @@ function ScrollableTextArea(): JSX.Element {
                         height: "3rem",
                         padding: "0.5rem",
                         borderTop: "1px solid #ccc",
+                        backgroundColor: "gray",
                     }}
                 />
                 <div>
                     <button onClick={handleResetClick}>Reset</button>
+                </div>
+                <div style={{ marginLeft: "1rem" }}>
+                    {data?.nextLocations.map((nextLocation: string) => (
+                        <button
+                            key={nextLocation}
+                            onClick={() => handleButtonClick(nextLocation)}
+                            style={{ display: "block", marginBottom: "5px" }}
+                        >
+                            {nextLocation}
+                        </button>
+                    ))}
                 </div>
             </div>
         </div>

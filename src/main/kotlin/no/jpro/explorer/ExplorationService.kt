@@ -43,6 +43,8 @@ class ExplorationService(
 
     fun reset() {
         messages.clear()
+        imageUrl=""
+        locationOptions = listOf<String>()
         initializeMessages()
     }
 
