@@ -66,52 +66,42 @@ function ScrollableTextArea(): JSX.Element {
     };
 
     useEffect(() => {
-        if (buttonClicked&&text.trim()) {
+        if (buttonClicked && text.trim()) {
             setButtonClicked(false);
             refetch();
         }
     }, [text]);
 
     return (
-        <div style={{ display: "flex" }}>
-            <div
-                style={{
-                    flexGrow: 1,
-                    height: "100vh",
-                    overflowY: "scroll",
-                    fontSize: "2em",
-                }}
-                ref={textAreaRef}
-            >
-                {isLoading
-                    ? "Loading..."
-                    : error
-                        ? "Error fetching data"
-                        : data?.description || ""}
-            </div>
-            <div>
+        <div style={{ display: "flex", height: "100vh" }}>
+            <div style={{ flexGrow: 1 }}>
                 {data && !isLoading && !error && (
                     <>
+                        <div
+                            style={{
+                                height: "66%",
+                                overflowY: "scroll",
+                                fontSize: "2em",
+                            }}
+                            ref={textAreaRef}
+                        >
+                            {data?.description || ""}
+                        </div>
                         <input
-                        type="text"
-                        placeholder="Type something here..."
-                        value={text}
-                        onChange={handleTextChange}
-                        onKeyDown={handleKeyDown}
-                        style={{
-                            height: "3rem",
-                            padding: "0.5rem",
-                            borderTop: "1px solid #ccc",
-                        }}
-                    />
+                            type="text"
+                            placeholder="Type something here..."
+                            value={text}
+                            onChange={handleTextChange}
+                            onKeyDown={handleKeyDown}
+                            style={{
+                                height: "3rem",
+                                padding: "0.5rem",
+                                borderTop: "1px solid #ccc",
+                            }}
+                        />
                         <div>
                             <button onClick={handleResetClick}>Reset</button>
                         </div>
-                        <img
-                            src={data.imageUrl}
-                            alt=""
-                            style={{ maxWidth: "100%" }}
-                        />
                         <div style={{ whiteSpace: "pre-line" }}>
                             {data.nextLocations.map((nextLocation: string) => (
                                 <button
@@ -126,11 +116,12 @@ function ScrollableTextArea(): JSX.Element {
                     </>
                 )}
             </div>
-
-
-
+            <div style={{ flexGrow: 1 }}>
+                {data && !isLoading && !error && (
+                    <img src={data.imageUrl} alt="" style={{ maxWidth: "100%" }} />
+                )}
+            </div>
         </div>
-
     );
 }
 

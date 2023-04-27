@@ -53,10 +53,12 @@ class ExplorationService(
                 role = ChatRole.User,
                 content = exploreRequest
             )
+            val requestMessages= messages.toMutableList()
+            requestMessages.add(newMessage)
 
             val completionRequest = ChatCompletionRequest(
                 model = ModelId("gpt-3.5-turbo"),
-                messages = messages
+                messages = requestMessages
 
             )
 
