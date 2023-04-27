@@ -79,6 +79,7 @@ function ScrollableTextArea(): JSX.Element {
                     flexGrow: 1,
                     height: "100vh",
                     overflowY: "scroll",
+                    fontSize: "2em",
                 }}
                 ref={textAreaRef}
             >
@@ -108,7 +109,7 @@ function ScrollableTextArea(): JSX.Element {
                         </div>
                         <img
                             src={data.imageUrl}
-                            alt="Exploration image"
+                            alt=""
                             style={{ maxWidth: "100%" }}
                         />
                         <div style={{ whiteSpace: "pre-line" }}>
