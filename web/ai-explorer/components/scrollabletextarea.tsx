@@ -86,7 +86,7 @@ function ScrollableTextArea(): JSX.Element {
                         <img
                             src={data?.imageUrl || ""}
                             alt=""
-                            style={{ width: "100%", height: "66%" }}
+
                         />
 
                         <div style={{ display: "flex" }}>
